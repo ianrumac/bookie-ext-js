@@ -15,10 +15,19 @@ html {
 }
 
 body {
-  width: 350px;
-  height: 300px;
+  width: 400px;
 }
 
+.listItem {
+  background-color: #BCEDEE;
+  font-weight: normal;
+  margin-top: 10pt;
+  margin-bottom: 10pt;
+  padding-top: 4pt;
+  padding-bottom: 4pt;
+  text-align: start;
+
+}
 .app {
   height: 100%;
   display: flex;
@@ -52,8 +61,10 @@ code {
   margin-bottom: 5px;
 }
 
-.counter {
-  font-size: 36px;
+.list {
+  list-style: none;
+  display: none;
+  font-size: 12px;
   font-weight: 700;
 }
 

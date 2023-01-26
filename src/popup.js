@@ -3,110 +3,85 @@
 import './popup.css';
 
 (function () {
-  // We will make use of Storage API to get and store `count` value
-  // More information on Storage API can we found at
-  // https://developer.chrome.com/extensions/storage
 
-  // To get storage access, we have to mention it in `permissions` property of manifest.json file
-  // More information on Permissions can we found at
-  // https://developer.chrome.com/extensions/declare_permissions
-  const counterStorage = {
-    get: (cb) => {
-      chrome.storage.sync.get(['count'], (result) => {
-        cb(result.count);
-      });
-    },
-    set: (value, cb) => {
-      chrome.storage.sync.set(
-        {
-          count: value,
-        },
-        () => {
-          cb();
+
+  document.getElementById("showList").addEventListener('click',()=>{
+    var list = document.getElementById("list");
+    var header = document.getElementById("showList");
+    if (list.style.display === "none"){
+    header.innerText = "Hide list"
+    list.style.display = "block";
+  }else{
+      header.innerText = "Show list"
+    list.style.display = "none";
+  }
+});
+
+  function getAllTabs() {
+    let tabs = [];
+    chrome.tabs.query({},(it)=>{
+      tabs.push(...tabsToTitles(it))
+      tabsToGroups(it).then((it)=>{
+        let groups =  [...new Map(it.map(item =>
+          [item['id'], item])).values()].filter((it)=>it.title.length !== 0);
+        showPrompt(tabs, groups)
+      })
+    })
+  }
+
+  async function tabsToGroups(tabs){
+    let groups = (tabs
+      .map( (it)=>it.groupId)
+      .filter((it)=>it!==null && it!==undefined && it!==-1));
+
+  return await Promise.all(groups
+      .map(async (it) => {
+      let item = await chrome.tabGroups.get(it)
+        return {
+          id: item.id,
+          title: item.title
         }
-      );
-    },
-  };
-
-  function setupCounter(initialValue = 0) {
-    document.getElementById('counter').innerHTML = initialValue;
-
-    document.getElementById('incrementBtn').addEventListener('click', () => {
-      updateCounter({
-        type: 'INCREMENT',
-      });
-    });
-
-    document.getElementById('decrementBtn').addEventListener('click', () => {
-      updateCounter({
-        type: 'DECREMENT',
-      });
-    });
+    }));
   }
 
-  function updateCounter({ type }) {
-    counterStorage.get((count) => {
-      let newCount;
-
-      if (type === 'INCREMENT') {
-        newCount = count + 1;
-      } else if (type === 'DECREMENT') {
-        newCount = count - 1;
-      } else {
-        newCount = count;
-      }
-
-      counterStorage.set(newCount, () => {
-        document.getElementById('counter').innerHTML = newCount;
-
-        // Communicate with content script of
-        // active tab by sending a message
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          const tab = tabs[0];
-
-          chrome.tabs.sendMessage(
-            tab.id,
-            {
-              type: 'COUNT',
-              payload: {
-                count: newCount,
-              },
-            },
-            (response) => {
-              console.log('Current count value passed to contentScript file');
-            }
-          );
-        });
-      });
-    });
+  function tabsToTitles(tabs){
+    let res = tabs.map((it)=>{
+       return {
+        id: it.id,
+        title: it.title,
+        url: it.url,
+        group: it.groupId}
+    })
+    return res;
   }
 
-  function restoreCounter() {
-    // Restore count value
-    counterStorage.get((count) => {
-      if (typeof count === 'undefined') {
-        // Set counter value as 0
-        counterStorage.set(0, () => {
-          setupCounter(0);
-        });
-      } else {
-        setupCounter(count);
-      }
-    });
+
+  function showPrompt(tabs,groups){
+      let doc = document.getElementById("list")
+    tabs.forEach((item)=>{
+      let li = document.createElement("li");
+      li.classList.add("listItem")
+      li.innerText = item.title;
+      doc.appendChild(li);
+    })
+
+    document.getElementById('sortBtn').addEventListener('click',callBackendToSort)
   }
 
-  document.addEventListener('DOMContentLoaded', restoreCounter);
+  function callBackendToSort(){
+    fetch('http://127.0.0.1:8001/sort',{
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        items: tabs,
+        categories: groups
+      })
+    }).then((response)=>{
+      console.log(response)
+      //TODO re-add groups to chrome sorted
+    }).catch((error)=>{console.log(error)})
 
-  // Communicate with background file by sending a message
-  chrome.runtime.sendMessage(
-    {
-      type: 'GREETINGS',
-      payload: {
-        message: 'Hello, my name is Pop. I am from Popup.',
-      },
-    },
-    (response) => {
-      console.log(response.message);
-    }
-  );
+  }
+
+  document.addEventListener('DOMContentLoaded', getAllTabs);
 })();

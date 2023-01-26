@@ -6,27 +6,23 @@
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <div class="app">
-      <p class="counter-label">Counter</p>
-      <div id="counter" class="counter"></div>
+    <div class="app" style="display:flex; align-items: center; justify-content: center;
+flex-direction: column">
+      <div id="error-log"></div>
       <div class="button-container">
-        <button id="decrementBtn" class="button">-</button>
-        <button id="incrementBtn" class="button">+</button>
+        <button id="sortBtn" class="button">Sort this mess</button>
       </div>
-
       <hr class="divider" />
+      <button id="showList" class="button">Show list</button>
+      <ul id="list" class="list">
+
+      </ul>
+
 
       <p class="title">Chrome Extension is Ready!</p>
-      <p class="subtitle">Start by updating <code>popup.html</code></p>
     </div>
 
     <script src="popup.js"></script>
 
-    <!--
-      This HTML file opens when you click on icon from the toolbar.
-
-      To begin the development, run `npm run watch`.
-      To create a production bundle, use `npm run build`.
-    -->
   </body>
 </html>
