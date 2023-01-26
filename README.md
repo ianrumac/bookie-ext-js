@@ -1,19 +1,22 @@
 # <img src="public/icons/icon_48.png" width="45" align="left"> Bookie Extension
 
-My Chrome Extension
+Bookie for Chrome
 
 ## Features
 
-- Feature 1
-- Feature 2
+- ☑️ Sort your tabs into groups using GPT
+- ☐ Sort your bookmarks using GPT
 
 ## Install
 
-[**Chrome** extension]() <!-- TODO: Add chrome extension link inside parenthesis -->
+1. npm run build
+2. Chrome -> Extensions -> Developer mode -> Load unpacked -> Select build folder
+
+Currently needs local backend to work - can clone at [Bookie Extension Backend](https://github.com/ianrumac/bookie-ext-rs)
 
 ## Contribution
 
-Suggestions and pull requests are welcomed!.
+Suggestions and pull requests are welcomed!.g
 
 ---
 
