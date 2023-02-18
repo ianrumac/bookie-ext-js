@@ -2,27 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>My Chrome Extension</title>
+    <title>Bookie JS</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <div class="app" style="display:flex; align-items: center; justify-content: center;
-flex-direction: column">
-      <div id="error-log"></div>
+    <div class="app">
       <div class="button-container">
-        <button id="sortBtn" class="button">Sort this mess</button>
-      </div>
-      <hr class="divider" />
-      <button id="showList" class="button">Show list</button>
-      <ul id="list" class="list">
-
-      </ul>
-
-
-      <p class="title">Chrome Extension is Ready!</p>
+        <!-- This will call our API -->
+      <button id="sortBtn" class="button">Sort my mess</button>
+        <div id="loading" class="loading"></div>
+        <div id="error" class="error"></div>
     </div>
-
-    <script src="popup.js"></script>
-
-  </body>
+    <hr class="divider" />
+      <!-- This will show us the list of tabs -->
+      <button id="showList" class="button">Show tabs</button>
+      <!-- We'll show it here -->
+      <ul id="list" class="list"></ul>
+  </div>
+  <script src="popup.js"></script>
+</body>
 </html>

@@ -72,9 +72,34 @@ code {
   margin-top: 15px;
 }
 
+.loading {
+  display: none;
+  border: 8px solid transparent;
+  border-top: 8px solid orange;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 3s linear infinite;
+}
+
+.error {
+  background-color: lightpink;
+  color: red;
+  display: none;
+  margin-top: 20pt;
+  border: 1px solid red;
+  width: 100%;
+  padding: 8pt;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .button {
   border: 0;
-  display: inline-block;
+  display: none;
   padding: 10px 20px;
   margin-right: 4px;
   margin-left: 4px;

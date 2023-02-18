@@ -16,13 +16,9 @@
     "default_title": "Bookie Extension",
     "default_popup": "popup.html"
   },
-  "host_permissions": [
-    "http://*/*",
-    "https://*/*"
-  ],
+  "host_permissions": ["*://*/*"],
   "permissions": [
     "tabGroups",
-    "storage",
     "tabs"
   ],
   "content_scripts": [
@@ -37,3 +33,4 @@
     }
   ]
 }
+
